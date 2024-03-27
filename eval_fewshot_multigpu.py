@@ -5,6 +5,7 @@ import copy
 from str2bool import str2bool
 from typing import Dict, Sequence
 from sentence_transformers import SentenceTransformer
+import numpy as np
 
 IGNORE_INDEX = -100
 
@@ -139,7 +140,7 @@ def generate_prompt(question, candidate_answers, prompt_type, N,
     indices = list(range(len(demonstrations)))
     if top_k: # task 5
         question_embeddings = llm_embedder(embedder, [question], True) # [1, n_dim]
-        similarity = "Write Your Code Here" @ "Write Your Code Here" # [1, n_demo]
+        similarity = np.matmul(question_embeddings, demonstration_embeddings.T).flatten() # [1, n_demo]
         indices_sorted = sorted(list(range(len(demonstrations))), key=lambda x: similarity[0][x], reverse=True)
         if top_k_reverse:
             indices = indices_sorted[:N][::-1] + indices_sorted[N:]
@@ -266,8 +267,8 @@ def main():
 
         with torch.no_grad():
             # task 6
-            outputs = model("Write Your Code Here")
-            log_likelihood = "Write Your Code Here"
+            outputs = model(encoding)
+            log_likelihood = model.log_likelihood(outputs,target)
 
 
         print("Saving results to {}".format(output_file))
