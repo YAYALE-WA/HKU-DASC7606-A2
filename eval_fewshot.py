@@ -123,9 +123,9 @@ def example_formating(question, answer=None, candidate_answers=None, prompt_type
             prompt = f"Question: {question}\nCandidate answers: {candidate_answers}\nGold answer:"
     elif prompt_type == "v2.0":
         if answer is not None:
-            prompt = "Write Your Code Here"
+            prompt = f"Consider the following question and its options:\n\n'{question}'\n\nThe options are as follows: {candidate_answers}\n\nThe correct option is: '{answer}'"
         else:
-            prompt = "Write Your Code Here"
+            prompt = f"For the question:\n\n'{question}'\n\nwith these options: {candidate_answers}\n\nWhat would be the correct option?"
     else:
         raise NotImplementedError
     return prompt

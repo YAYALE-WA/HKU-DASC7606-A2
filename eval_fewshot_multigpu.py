@@ -116,7 +116,7 @@ def llm_embedder(llm, sentences, is_query=True):
 def candidate_answers_formating(texts, labels):
     candidate_answers = " ".join([f"({label}) {text}" for text, label in zip(texts, labels)]).strip()
     return candidate_answers
-
+ 
 # task 4
 def example_formating(question, answer=None, candidate_answers=None, prompt_type="v2.0"):
     if prompt_type == "v1.0":
@@ -126,9 +126,9 @@ def example_formating(question, answer=None, candidate_answers=None, prompt_type
             prompt = f"Question: {question}\nCandidate answers: {candidate_answers}\nGold answer:"
     elif prompt_type == "v2.0":
         if answer is not None:
-            prompt = "Write Your Code Here"
+            prompt = f"Consider the following question and its options:\n\n'{question}'\n\nThe options are as follows: {candidate_answers}\n\nThe correct option is: '{answer}'"
         else:
-            prompt = "Write Your Code Here"
+            prompt = f"For the question:\n\n'{question}'\n\nwith these options: {candidate_answers}\n\nWhat would be the correct option?"
     else:
         raise NotImplementedError
     return prompt
